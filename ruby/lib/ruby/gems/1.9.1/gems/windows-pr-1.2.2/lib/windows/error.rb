@@ -446,7 +446,11 @@ module Windows
       buf   = 0.chr * 260
       flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ARGUMENT_ARRAY
       FormatMessageA.call(flags, 0, err_num, 0, buf, buf.size, 0)
-      buf.strip
+      if RUBY_VERSION < '1.9.0'
+        buf.strip
+      else
+        buf.force_encoding(Encoding.default_external).strip
+      end
     end
 
     # Macros from WinError.h
